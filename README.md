@@ -14,7 +14,8 @@ esterno, niente cookie, niente moduli: non c'è nulla da aggiornare.
 - [ ] Confermare con Luca gli **orari** (Google e altre fonti non coincidono)
 - [ ] Confermare che il **338 586 7760** è anche su **WhatsApp**
 - [ ] Confermare i servizi (taglio, barba, bambini) ed eventuali prezzi
-- [ ] Permesso di Luca per usare la foto del murale
+- [ ] Permesso di Luca per usare le foto
+- [ ] Foto più grandi: le due di Luca al lavoro sono 125×125 px (miniature di Google). Sostituire `assets/luca-al-lavoro-1.jpg` e `-2.jpg` con versioni grandi, stesso nome, formato quadrato
 
 ## Pubblicare (gratis)
 **Netlify Drop:** vai su https://app.netlify.com/drop e trascina questa cartella.

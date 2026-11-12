@@ -142,30 +142,49 @@ h2 {
 .whatsapp { background: var(--pettine); }
 .prenota { background: var(--forbici); }
 
-.murale {
-  margin: 0;
-  justify-self: center;
-  width: min(100%, 20rem);
-  transform: rotate(1.5deg);
-}
-.murale img {
-  border: 4px solid var(--inchiostro);
-  box-shadow: 8px 8px 0 var(--inchiostro);
-  background: var(--muro-scuro);
-}
-.murale figcaption {
-  font-size: 0.95rem;
-  margin-top: 0.9rem;
-  text-align: center;
-}
 
 @media (min-width: 52rem) {
-  .murale { width: min(100%, 26rem); }
   .apertura {
-    grid-template-columns: 1.15fr 1fr;
     padding-top: 4rem;
     padding-bottom: 4.5rem;
   }
+}
+
+.nowrap { white-space: nowrap; }
+
+/* ---------- Foto: tre polaroid buttate sul tavolo ---------- */
+
+.polaroid {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 30rem;
+}
+.polaroid li {
+  background: var(--nuvola);
+  border: var(--tratto);
+  box-shadow: var(--ombra);
+  padding: 0.4rem 0.4rem 1.2rem;
+}
+.polaroid li:nth-child(1) { transform: rotate(-5deg); position: relative; z-index: 1; }
+.polaroid li:nth-child(2) { transform: rotate(3deg) translateY(1rem); margin: 0 -0.75rem; position: relative; z-index: 2; }
+.polaroid li:nth-child(3) { transform: rotate(-2deg); position: relative; z-index: 1; }
+.polaroid img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+
+@media (min-width: 52rem) {
+  .apertura { grid-template-columns: 1.1fr 1fr; }
+  .polaroid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    justify-self: center;
+    width: 100%;
+  }
+  .polaroid li { padding: 0.6rem 0.6rem 2rem; }
+  .polaroid li:nth-child(1) { transform: rotate(-4deg) translate(1rem, 0); }
+  .polaroid li:nth-child(2) { transform: rotate(3deg) translate(-1rem, 2rem); margin: 0; }
+  .polaroid li:nth-child(3) { grid-column: 1 / -1; width: 55%; justify-self: center; transform: rotate(-2deg) translateY(-1.5rem); z-index: 3; }
 }
 
 /* ---------- Fasce ---------- */
