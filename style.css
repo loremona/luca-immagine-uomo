@@ -315,3 +315,213 @@ address { font-style: normal; font-size: 1.25rem; margin-bottom: 1.5rem; }
 @media (prefers-reduced-motion: reduce) {
   .bottone:hover, .bottone:active { transform: none; }
 }
+
+/* =====================================================================
+   VERSIONE STRAVAGANTE — sopra lo stile base: retino da fumetto,
+   scoppio per il voto, fasce in diagonale, vignette colorate.
+   ===================================================================== */
+
+/* retino a puntini (Ben-Day) sul muro giallo */
+body {
+  background-color: var(--muro);
+  background-image: radial-gradient(rgba(201, 48, 42, 0.18) 1.6px, transparent 1.8px);
+  background-size: 14px 14px;
+}
+
+/* il nome: ogni parola storta per conto suo */
+.nome span { width: max-content; }
+.nome span:nth-child(1) { transform: rotate(-4deg); }
+.nome span:nth-child(2) { transform: rotate(1.5deg) translateX(0.4rem); color: var(--muro); }
+.nome .uomo {
+  transform: rotate(-2deg);
+  background: var(--mantella);
+  color: var(--nuvola);
+  padding: 0.1em 0.25em 0;
+  margin-top: 0.15em;
+  border: 4px solid var(--inchiostro);
+  box-shadow: 7px 7px 0 var(--forbici);
+  text-shadow: 4px 4px 0 var(--inchiostro);
+}
+
+.dove {
+  display: inline-block;
+  background: var(--nuvola);
+  border: var(--tratto);
+  padding: 0.3rem 0.7rem;
+  transform: rotate(1deg);
+  font-weight: 700;
+  max-width: none;
+}
+
+/* lo scoppio del voto */
+.scoppio {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 12.5rem;
+  height: 12.5rem;
+  margin: 0.5rem 0 -1rem -0.75rem;
+  text-decoration: none;
+  text-align: center;
+  transform: rotate(-8deg);
+}
+.scoppio svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--forbici);
+  stroke: var(--inchiostro);
+  stroke-width: 5;
+  stroke-linejoin: round;
+  filter: drop-shadow(5px 5px 0 var(--inchiostro));
+}
+.scoppio .voto, .scoppio .quante { position: relative; }
+.scoppio .voto {
+  font-family: "Luckiest Guy", sans-serif;
+  font-size: 3.4rem;
+  line-height: 0.9;
+  color: var(--nuvola);
+  -webkit-text-stroke: 2px var(--inchiostro);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--inchiostro);
+  margin-top: 1.4rem;
+}
+.scoppio .voto small {
+  display: block;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--muro);
+  -webkit-text-stroke: 1px var(--inchiostro);
+}
+.scoppio .quante {
+  color: var(--nuvola);
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.15;
+  margin-top: -2.8rem;
+}
+.scoppio:hover svg { fill: var(--mantella); }
+
+/* bottoni più rumorosi */
+.bottone {
+  border-width: 4px;
+  box-shadow: 6px 6px 0 var(--inchiostro);
+  font-size: 1.2rem;
+}
+.azioni .bottone:nth-child(1) { transform: rotate(-2deg); }
+.azioni .bottone:nth-child(2) { transform: rotate(1.5deg); }
+.azioni .bottone:nth-child(3) { transform: rotate(-1deg); }
+.azioni .bottone:hover { transform: rotate(0) scale(1.05); }
+
+/* polaroid + adesivo "Zac! Zac!" */
+.tavolo { position: relative; }
+.zac {
+  position: absolute;
+  z-index: 5;
+  top: -1.2rem;
+  right: 0.5rem;
+  font-family: "Luckiest Guy", sans-serif;
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  color: var(--muro);
+  -webkit-text-stroke: 2px var(--inchiostro);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--forbici), 6px 6px 0 var(--inchiostro);
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+.polaroid li:nth-child(2) { background: var(--muro); }
+
+/* fasce tagliate in diagonale invece che dritte */
+.fascia {
+  border-top: 0;
+  position: relative;
+  clip-path: polygon(0 2.5rem, 100% 0, 100% 100%, 0 100%);
+  margin-top: -1.5rem;
+  padding-top: 5rem;
+  padding-bottom: 4rem;
+}
+.fascia.nuvola { background: var(--mantella); color: var(--nuvola); }
+.fascia:not(.nuvola) { background: transparent; }
+
+/* titoli di sezione su un nastro */
+h2 {
+  display: inline-block;
+  background: var(--forbici);
+  color: var(--nuvola);
+  padding: 0.25em 0.5em 0.1em;
+  border: 4px solid var(--inchiostro);
+  box-shadow: 6px 6px 0 var(--inchiostro);
+  transform: rotate(-2deg);
+  margin-bottom: 2rem;
+}
+.fascia.nuvola h2 { background: var(--muro); color: var(--mantella); }
+
+/* servizi come vignette colorate */
+.servizi li {
+  background: var(--nuvola);
+  color: var(--inchiostro);
+  border: var(--tratto);
+  box-shadow: 6px 6px 0 var(--inchiostro);
+  padding: 1.1rem;
+}
+.servizi li:nth-child(1) { transform: rotate(-1.5deg); }
+.servizi li:nth-child(2) { transform: rotate(1deg); background: var(--muro); }
+.servizi li:nth-child(3) { transform: rotate(-0.5deg); }
+
+/* nuvolette più storte */
+.recensioni li:nth-child(1) blockquote { transform: rotate(-1.5deg); }
+.recensioni li:nth-child(2) blockquote { transform: rotate(1.2deg); background: #fff3c2; }
+.recensioni li:nth-child(3) blockquote { transform: rotate(-0.8deg); }
+.recensioni li:nth-child(2) blockquote::after { background: #fff3c2; }
+.fonte {
+  display: inline-block;
+  background: var(--nuvola);
+  border: 2px solid var(--inchiostro);
+  padding: 0.2rem 0.6rem;
+}
+
+/* orari: cartellone appeso */
+.orari {
+  color: var(--inchiostro);
+  transform: rotate(-1deg);
+  border-width: 4px;
+  box-shadow: 8px 8px 0 var(--forbici), 8px 8px 0 4px var(--inchiostro);
+}
+.orari tr.oggi { background: var(--muro); }
+.orari tr.oggi th::after { content: " · oggi"; color: var(--forbici); }
+address { color: var(--nuvola); font-weight: 700; }
+
+/* piede a zig-zag */
+.piede {
+  border-top: 0;
+  position: relative;
+  margin-top: 1rem;
+}
+.piede::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -18px;
+  height: 18px;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--inchiostro) 50%) 0 0 / 24px 18px repeat-x,
+    linear-gradient(-135deg, transparent 50%, var(--inchiostro) 50%) 0 0 / 24px 18px repeat-x;
+}
+.piede a { color: var(--muro); }
+
+/* l'unico momento animato: lo scoppio "esplode" all'apertura */
+@media (prefers-reduced-motion: no-preference) {
+  .scoppio { animation: botto 0.6s cubic-bezier(.2, 1.6, .4, 1) 0.2s both; }
+  @keyframes botto {
+    from { transform: rotate(-30deg) scale(0); }
+    to { transform: rotate(-8deg) scale(1); }
+  }
+}
+
+@media (min-width: 52rem) {
+  .scoppio { position: absolute; margin: 0; right: -1rem; bottom: -2.5rem; }
+  .apertura > div:first-child { position: relative; }
+  .zac { top: -2rem; right: 0; }
+}
