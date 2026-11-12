@@ -40,7 +40,7 @@
 <div class="vita" aria-hidden="true"><div class="vita-piena"></div></div>
 
 <header class="testa">
-  <p class="nota" id="nota">La barra a sinistra è l'energia di Luca: si scarica durante la giornata di lavoro.</p>
+  <p class="nota" id="nota">Energia rimasta della giornata</p>
   <div class="dentro">
     <div class="nome-scatola">
       <a class="stato" id="stato" href="#orari">Guarda gli orari</a>
@@ -248,14 +248,7 @@
       resta += Math.max(0, a - Math.max(da, adesso));
     });
     var hp = totale ? Math.round(resta / totale * 100) : 0;
-    var ore = Math.floor(resta / 60), min = resta % 60;
-    var durata = (ore ? ore + " h" : "") + (ore && min ? " " : "") + (min || !ore ? min + " min" : "");
-    var nota = "La barra a sinistra è l'energia di Luca per oggi: ";
-    if (!totale) nota = "La barra a sinistra è l'energia di Luca: oggi il negozio è chiuso e lui si ricarica.";
-    else if (resta === 0) nota += "0%. Per oggi ha finito di lavorare.";
-    else if (resta === totale) nota += "100%. Oggi lavora " + durata + ".";
-    else if (aperto) nota += hp + "%. Gli restano " + durata + " di lavoro.";
-    else nota += hp + "%. Adesso è in pausa, poi gli restano " + durata + " di lavoro.";
+    var nota = totale ? "Energia rimasta della giornata: " + hp + "%" : "Energia in ricarica: oggi è chiuso";
 
     var radice = document.documentElement;
     radice.style.setProperty("--hp", hp + "%");
