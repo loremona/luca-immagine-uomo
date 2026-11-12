@@ -6,7 +6,7 @@ esterno, niente cookie, niente moduli: non c'è nulla da aggiornare.
 ## Struttura
 - `index.html` — pagina principale
 - `privacy.html` — informativa (il sito non raccoglie dati)
-- `style.css` — stile "palo da barbiere": blu, bianco, rosso
+- `style.css` — stile fumetto (muro giallo, adesivi) + palo da barbiere che gira a negozio aperto
 - `assets/` — foto, caratteri ospitati in locale, favicon
 
 La versione precedente a fumetto è salvata in git: `git checkout fumetto`.
