@@ -43,10 +43,12 @@
   <div class="dentro">
     <div class="nome-scatola">
       <a class="stato" id="stato" href="#orari">Guarda gli orari</a>
+      <div class="nome-riga">
       <h1 class="grande nome"><span>Luca</span><span>Immagine</span><span class="uomo">Uomo</span></h1>
       <div class="scoppio" aria-hidden="true">
         <svg viewBox="0 0 200 200"><polygon points="100,4 117,52 160,18 146,68 198,62 156,96 196,130 144,128 160,182 116,146 100,196 84,146 40,182 56,128 4,130 44,96 2,62 54,68 40,18 83,52"/></svg>
         <span class="voto">4,8<small>★★★★★</small></span>
+      </div>
       </div>
     </div>
 
@@ -74,9 +76,9 @@
       <div class="tavolo">
         <span class="zac" aria-hidden="true">Zac! Zac!</span>
         <ul class="polaroid" aria-label="Foto dal negozio">
-          <li><img src="assets/luca-al-lavoro-1.jpg" width="375" height="375" alt="Luca al lavoro in negozio, con un cliente seduto sulla poltrona."><span>Luca al lavoro</span></li>
-          <li><img src="assets/murale-quadrato.jpg" width="480" height="480" alt="Il murale del vecchio negozio: Luca in versione fumetto taglia una montagna di capelli schiumosi a un cliente terrorizzato."><span>Il murale del vecchio negozio</span></li>
-          <li><img src="assets/luca-al-lavoro-2.jpg" width="375" height="375" alt="Luca mentre taglia i capelli a un cliente."><span>In poltrona</span></li>
+          <li><img src="assets/luca-al-lavoro-1.jpg" width="375" height="375" alt="Luca al lavoro in negozio, con un cliente seduto sulla poltrona."></li>
+          <li><img src="assets/murale-quadrato.jpg" width="480" height="480" alt="Il murale del vecchio negozio: Luca in versione fumetto taglia una montagna di capelli schiumosi a un cliente terrorizzato."></li>
+          <li><img src="assets/luca-al-lavoro-2.jpg" width="375" height="375" alt="Luca mentre taglia i capelli a un cliente."></li>
         </ul>
       </div>
     </div>
@@ -195,29 +197,59 @@
 
     var giorno = SIGLE[parti.weekday];
     var adesso = +parti.hour * 60 + +parti.minute;
-    var testo = null, aperto = false;
 
-    ORARI[giorno].forEach(function (f) {
-      if (adesso >= minuti(f[0]) && adesso < minuti(f[1])) {
-        aperto = true;
-        testo = "Aperto adesso, fino alle " + bello(f[1]);
+    // la prossima apertura dopo un certo minuto di oggi
+    function prossima(dopo) {
+      for (var i = 0; i < 8; i++) {
+        var g = (giorno + i) % 7;
+        for (var j = 0; j < ORARI[g].length; j++) {
+          var inizio = ORARI[g][j][0];
+          if (i > 0 || minuti(inizio) > dopo) {
+            var giornoTesto = i === 0 ? "" : i === 1 ? "domani " : NOMI[g] + " ";
+            return { oggi: i === 0, testo: giornoTesto + "alle " + bello(inizio) };
+          }
+        }
       }
+      return null;
+    }
+
+    var fasce = ORARI[giorno], fascia = null;
+    fasce.forEach(function (f) {
+      if (adesso >= minuti(f[0]) && adesso < minuti(f[1])) fascia = f;
     });
 
-    for (var i = 0; i < 8 && !testo; i++) {
-      var g = (giorno + i) % 7;
-      for (var j = 0; j < ORARI[g].length && !testo; j++) {
-        var inizio = ORARI[g][j][0];
-        if (i > 0 || minuti(inizio) > adesso) {
-          var quando = i === 0 ? "" : i === 1 ? "domani " : NOMI[g] + " ";
-          testo = "Chiuso adesso, riapre " + quando + "alle " + bello(inizio);
-        }
+    var aperto = !!fascia, titolo, frase = "", poi;
+    if (aperto) {
+      titolo = "Aperto adesso, fino alle " + bello(fascia[1]);
+      poi = prossima(minuti(fascia[1]) - 1);
+      if (poi) {
+        frase = (poi.oggi ? "Poi Luca va a mangiare: si riapre " : "Poi le forbici riposano: si riapre ") + poi.testo + ".";
+      }
+    } else {
+      titolo = "Chiuso adesso";
+      poi = prossima(adesso);
+      if (poi) {
+        if (!fasce.length) frase = "Anche i barbieri riposano: si riapre ";
+        else if (!poi.oggi) frase = "Le forbici riposano: si riapre ";
+        else if (adesso < minuti(fasce[0][0])) frase = "Luca sta scaldando le forbici: si apre ";
+        else frase = "Luca è a pranzo: si riapre ";
+        frase += poi.testo + ".";
       }
     }
 
     document.body.classList.toggle("aperto", aperto);
     document.body.classList.toggle("chiuso", !aperto);
-    if (testo) document.getElementById("stato").textContent = testo;
+
+    var stato = document.getElementById("stato");
+    var dentro = document.createElement("span");
+    var forte = document.createElement("strong");
+    var piccolo = document.createElement("small");
+    forte.textContent = titolo;
+    piccolo.textContent = frase;
+    dentro.appendChild(forte);
+    dentro.appendChild(piccolo);
+    stato.textContent = "";
+    stato.appendChild(dentro);
 
     var righe = document.querySelectorAll(".orari tr");
     for (var r = 0; r < righe.length; r++) {
