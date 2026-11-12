@@ -262,7 +262,8 @@
 </script>
 <script>
 /* Gioco di pochi secondi, solo col mouse su schermo grande:
-   "Prenota" viene incontro al puntatore, "Chiama" scappa.
+   dal primo movimento del mouse "Prenota" resta attaccato al puntatore,
+   ovunque vada; "Chiama" scappa quando ci si avvicina.
    Dopo DURATA millisecondi tutto torna fermo e normale.
    Non parte su telefono, da tastiera o con le animazioni ridotte. */
 (function () {
@@ -272,28 +273,29 @@
 
   var DURATA = 6000;
   var pezzi = [
-    { el: document.querySelector(".azioni .prenota"), segue: true, raggio: 240, max: 90, x: 0, y: 0 },
+    { el: document.querySelector(".azioni .prenota"), segue: true, x: 0, y: 0 },
     { el: document.querySelector(".azioni .chiama"), segue: false, raggio: 130, max: 110, x: 0, y: 0 }
   ];
   if (!pezzi[0].el || !pezzi[1].el) return;
   var partito = false;
 
   function muovi(e) {
+    if (!partito) {
+      partito = true;
+      pezzi[0].el.style.zIndex = 30; // sopra a tutto mentre insegue
+      setTimeout(fine, DURATA);
+    }
     pezzi.forEach(function (p) {
       var r = p.el.getBoundingClientRect();
       // centro "di casa" del bottone, cioè senza lo spostamento del gioco
       var cx = r.left + r.width / 2 - p.x, cy = r.top + r.height / 2 - p.y;
       var dx = e.clientX - cx, dy = e.clientY - cy;
       var d = Math.sqrt(dx * dx + dy * dy) || 1;
-      if (d < p.raggio) {
-        if (!partito) { partito = true; setTimeout(fine, DURATA); }
-        if (p.segue) {
-          var k = Math.min(0.7, p.max / d);
-          p.x = dx * k; p.y = dy * k;
-        } else {
-          var spinta = (1 - d / p.raggio) * p.max;
-          p.x = -dx / d * spinta; p.y = -dy / d * spinta;
-        }
+      if (p.segue) {
+        p.x = dx; p.y = dy;
+      } else if (d < p.raggio) {
+        var spinta = (1 - d / p.raggio) * p.max;
+        p.x = -dx / d * spinta; p.y = -dy / d * spinta;
       } else { p.x = 0; p.y = 0; }
       p.el.style.translate = p.x + "px " + p.y + "px";
     });
@@ -301,7 +303,7 @@
 
   function fine() {
     document.removeEventListener("mousemove", muovi);
-    pezzi.forEach(function (p) { p.el.style.translate = ""; });
+    pezzi.forEach(function (p) { p.el.style.translate = ""; p.el.style.zIndex = ""; });
   }
 
   document.addEventListener("mousemove", muovi, { passive: true });
