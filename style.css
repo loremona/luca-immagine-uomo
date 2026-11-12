@@ -1,527 +1,319 @@
-/* Luca Immagine Uomo — stile preso dal murale del negozio:
-   muro giallo, mantella blu, pettine verde, forbici rosse, contorni neri. */
+/* Luca Immagine Uomo
+   Idea: i tre colori del palo da barbiere e nient'altro.
+   Un palo vero corre lungo il bordo sinistro e gira solo quando
+   il negozio è aperto (lo decide lo script in fondo a index.html). */
 
 @font-face {
-  font-family: "Luckiest Guy";
-  src: url("assets/luckiest-guy-latin-400-normal.woff2") format("woff2");
+  font-family: "Big Shoulders";
+  src: url("assets/big-shoulders-display-latin-900-normal.woff2") format("woff2");
+  font-weight: 900;
   font-display: swap;
 }
 @font-face {
-  font-family: "Atkinson";
-  src: url("assets/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2");
+  font-family: "Figtree";
+  src: url("assets/figtree-latin-400-normal.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
-  font-family: "Atkinson";
-  src: url("assets/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2");
+  font-family: "Figtree";
+  src: url("assets/figtree-latin-700-normal.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }
 
 :root {
-  --muro: #efd987;
-  --muro-scuro: #e2c766;
-  --mantella: #2b3590;
-  --pettine: #3f8f33;
-  --forbici: #c9302a;
-  --inchiostro: #1f1a17;
-  --nuvola: #fffdf6;
-  --tratto: 3px solid var(--inchiostro);
-  --ombra: 5px 5px 0 var(--inchiostro);
+  --blu: #1c2a9e;
+  --notte: #0d1340;
+  --rosso: #e2322c;
+  --bianco: #ffffff;
+  --ghiaccio: #eceffb;
+  --palo: clamp(16px, 3.6vw, 40px);
+  --barra: 4.25rem;
 }
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--muro);
-  color: var(--inchiostro);
-  font-family: "Atkinson", system-ui, sans-serif;
+  padding-left: var(--palo);
+  padding-bottom: calc(var(--barra) + env(safe-area-inset-bottom, 0px));
+  background: var(--bianco);
+  color: var(--notte);
+  font-family: "Figtree", system-ui, sans-serif;
   font-size: 1.125rem;
   line-height: 1.5;
 }
 
-img { max-width: 100%; display: block; }
-
+img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
+:focus-visible { outline: 3px solid var(--rosso); outline-offset: 3px; }
 
-:focus-visible {
-  outline: 3px solid var(--mantella);
-  outline-offset: 3px;
-}
-
-.pagina {
-  max-width: 68rem;
+.dentro {
+  max-width: 70rem;
   margin: 0 auto;
-  padding: 0 16px;
+  padding-left: clamp(16px, 4vw, 48px);
+  padding-right: clamp(16px, 4vw, 48px);
 }
 
-h1, h2 {
-  font-family: "Luckiest Guy", "Arial Black", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1;
+.grande {
+  font-family: "Big Shoulders", "Arial Narrow", Impact, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.85;
   margin: 0;
 }
 
-h2 {
-  font-size: clamp(2rem, 6vw, 2.75rem);
-  color: var(--mantella);
-  -webkit-text-stroke: 1.5px var(--inchiostro);
-  paint-order: stroke fill;
-  text-shadow: 3px 3px 0 var(--inchiostro);
-  margin-bottom: 1.25rem;
+/* ---------- Il palo ---------- */
+
+.palo {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--palo);
+  border-right: 3px solid var(--notte);
+  /* sopra: il riflesso del vetro; sotto: le strisce (periodo verticale 80px) */
+  background-image:
+    linear-gradient(90deg, rgba(13,19,64,.45), rgba(255,255,255,.35) 32%, rgba(255,255,255,0) 55%, rgba(13,19,64,.5)),
+    repeating-linear-gradient(135deg,
+      #fff 0 14.142px,
+      var(--rosso) 14.142px 28.284px,
+      #fff 28.284px 42.426px,
+      var(--blu) 42.426px 56.569px);
+  background-size: 100% 100%, 100% 80px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .aperto .palo { animation: gira 2.6s linear infinite; }
+  @keyframes gira { to { background-position: 0 0, 0 80px; } }
 }
 
-/* ---------- Apertura ---------- */
+/* ---------- Testa ---------- */
 
-.apertura {
-  display: grid;
-  gap: 2rem;
-  padding-top: 2.5rem;
-  padding-bottom: 3rem;
-  align-items: center;
+.testa {
+  background: var(--blu);
+  color: var(--bianco);
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
 
-.nome {
-  font-size: clamp(3.2rem, 13vw, 6.5rem);
-  color: var(--nuvola);
-  -webkit-text-stroke: 3px var(--inchiostro);
-  paint-order: stroke fill;
-  text-shadow: 6px 6px 0 var(--inchiostro);
-}
+.testa .dentro { display: grid; gap: 2rem; }
+
+.nome-scatola { container-type: inline-size; }
+.nome { font-size: 26cqi; }
 .nome span { display: block; }
-.nome .uomo { color: var(--forbici); }
 
-.dove {
-  font-size: 1.25rem;
-  margin: 1.25rem 0 1.5rem;
-  max-width: 30ch;
-}
-
-/* il cartello bianco del murale ("Il mio miglior cliente") */
-.cartello {
-  display: inline-block;
-  background: var(--nuvola);
-  border: var(--tratto);
-  box-shadow: var(--ombra);
-  padding: 0.6rem 1rem;
-  transform: rotate(-1.5deg);
-  text-decoration: none;
-}
-.cartello strong { font-size: 1.5rem; }
-.stelle { color: #d99a00; letter-spacing: 0.1em; }
-
-.azioni {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 2rem;
-}
-
-.bottone {
+.stato {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 1.25rem;
-  border: var(--tratto);
-  border-radius: 999px;
-  box-shadow: 4px 4px 0 var(--inchiostro);
-  color: var(--nuvola);
+  gap: 0.6rem;
+  margin: 0 0 1.5rem;
+  padding: 0.4rem 0.9rem 0.4rem 0.7rem;
+  background: var(--bianco);
+  color: var(--notte);
   font-weight: 700;
-  font-size: 1.125rem;
+  border-radius: 999px;
   text-decoration: none;
 }
-.bottone:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--inchiostro); }
-.bottone:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--inchiostro); }
-.bottone svg { width: 1.3em; height: 1.3em; flex: none; }
-.chiama { background: var(--mantella); }
-.whatsapp { background: var(--pettine); }
-.prenota { background: var(--forbici); }
+.stato::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #9aa0c4;
+  flex: none;
+}
+.aperto .stato::before { background: #17a34a; box-shadow: 0 0 0 4px rgba(23,163,74,.25); }
+.chiuso .stato::before { background: var(--rosso); }
 
+.sotto { font-size: clamp(1.2rem, 2.6vw, 1.5rem); margin: 0; max-width: 24ch; }
+.nowrap { white-space: nowrap; }
+.nota { font-size: 0.95rem; opacity: 0.8; margin: 0.75rem 0 0; max-width: 34ch; }
+@media (prefers-reduced-motion: reduce) { .nota { display: none; } }
 
-@media (min-width: 52rem) {
-  .apertura {
-    padding-top: 4rem;
-    padding-bottom: 4.5rem;
-  }
+.voto {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+  text-decoration: none;
+}
+.voto .grande { font-size: 4.5rem; }
+.voto span:last-child { text-decoration: underline; text-underline-offset: 3px; }
+
+/* le due foto piccole, virate in blu perché sembrino una cosa sola con la pagina */
+.scatti { display: flex; align-items: flex-start; gap: 0.75rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+.scatti li {
+  width: 8.5rem;
+  background: var(--blu);
+  border: 3px solid var(--bianco);
+}
+.scatti li:nth-child(2) { margin-top: 1.5rem; }
+.scatti img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.15) brightness(1.05);
+  mix-blend-mode: screen;
 }
 
-.nowrap { white-space: nowrap; }
+/* ---------- Azioni: barra fissa su telefono, bottoni in testa su schermo grande ---------- */
 
-/* ---------- Foto: tre polaroid buttate sul tavolo ---------- */
-
-.polaroid {
-  list-style: none;
-  margin: 0.5rem 0 0;
-  padding: 0;
+.azioni {
+  position: fixed;
+  z-index: 15;
+  left: var(--palo);
+  right: 0;
+  bottom: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  max-width: 30rem;
+  background: var(--bianco);
+  border-top: 3px solid var(--notte);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.polaroid li {
-  background: var(--nuvola);
-  border: var(--tratto);
-  box-shadow: var(--ombra);
-  padding: 0.4rem 0.4rem 1.2rem;
-}
-.polaroid li:nth-child(1) { transform: rotate(-5deg); position: relative; z-index: 1; }
-.polaroid li:nth-child(2) { transform: rotate(3deg) translateY(1rem); margin: 0 -0.75rem; position: relative; z-index: 2; }
-.polaroid li:nth-child(3) { transform: rotate(-2deg); position: relative; z-index: 1; }
-.polaroid img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
-
-@media (min-width: 52rem) {
-  .apertura { grid-template-columns: 1.1fr 1fr; }
-  .polaroid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    justify-self: center;
-    width: 100%;
-  }
-  .polaroid li { padding: 0.6rem 0.6rem 2rem; }
-  .polaroid li:nth-child(1) { transform: rotate(-4deg) translate(1rem, 0); }
-  .polaroid li:nth-child(2) { transform: rotate(3deg) translate(-1rem, 2rem); margin: 0; }
-  .polaroid li:nth-child(3) { grid-column: 1 / -1; width: 55%; justify-self: center; transform: rotate(-2deg) translateY(-1.5rem); z-index: 3; }
-}
-
-/* ---------- Fasce ---------- */
-
-.fascia {
-  border-top: var(--tratto);
-  padding: 3rem 0;
-}
-.fascia.nuvola { background: var(--nuvola); }
-
-/* ---------- Servizi ---------- */
-
-.servizi {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 1.5rem;
-}
-.servizi li {
-  display: grid;
-  grid-template-columns: 3.25rem 1fr;
-  gap: 1rem;
-  align-items: start;
-}
-.servizi svg { width: 3.25rem; height: 3.25rem; }
-.servizi h3 { margin: 0 0 0.2rem; font-size: 1.3rem; }
-.servizi p { margin: 0; max-width: 40ch; }
-
-@media (min-width: 52rem) {
-  .servizi { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-}
-
-/* ---------- Recensioni (nuvolette come la schiuma del murale) ---------- */
-
-.recensioni {
-  display: grid;
-  gap: 2.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.recensioni blockquote {
-  margin: 0;
-  background: var(--nuvola);
-  border: var(--tratto);
-  border-radius: 1.5rem;
-  padding: 1.1rem 1.25rem;
-  position: relative;
-  box-shadow: var(--ombra);
-}
-.recensioni blockquote::after {
-  content: "";
-  position: absolute;
-  left: 2rem;
-  bottom: -16px;
-  width: 26px;
-  height: 26px;
-  background: var(--nuvola);
-  border-right: var(--tratto);
-  border-bottom: var(--tratto);
-  transform: rotate(45deg) skew(10deg, 10deg);
-}
-.recensioni p { margin: 0; }
-.recensioni cite {
-  display: block;
-  font-style: normal;
+.azioni a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: var(--barra);
+  color: var(--notte);
   font-weight: 700;
-  margin: 1.1rem 0 0 1rem;
+  font-size: 0.95rem;
+  text-decoration: none;
 }
-.fonte { margin-top: 2rem; }
+.azioni a + a { border-left: 3px solid var(--notte); }
+.azioni svg { width: 1.5rem; height: 1.5rem; }
+.azioni .prenota { background: var(--rosso); color: var(--bianco); }
 
-@media (min-width: 52rem) {
-  .recensioni { grid-template-columns: repeat(3, 1fr); }
+@media (min-width: 56rem) {
+  body { padding-bottom: 0; }
+  .testa .dentro { grid-template-columns: 1.15fr 1fr; gap: 3.5rem; align-items: end; }
+  .azioni {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin-top: 2rem;
+  }
+  .azioni a {
+    flex-direction: row;
+    gap: 0.5rem;
+    min-height: 0;
+    padding: 0.85rem 1.2rem;
+    background: var(--bianco);
+    font-size: 1.05rem;
+  }
+  .azioni a + a { border-left: 0; }
+  .azioni a:hover { background: var(--notte); color: var(--bianco); }
+  .azioni .prenota:hover { background: var(--bianco); color: var(--rosso); }
+  .azioni svg { width: 1.25rem; height: 1.25rem; }
+}
+
+/* ---------- Sezioni ---------- */
+
+.sezione { padding-top: clamp(3rem, 8vw, 6rem); padding-bottom: clamp(3rem, 8vw, 6rem); }
+.sezione.ghiaccio { background: var(--ghiaccio); }
+.sezione.blu { background: var(--blu); color: var(--bianco); }
+
+.titolo { font-size: clamp(2.6rem, 9vw, 5rem); margin-bottom: 2rem; }
+
+/* ---------- Listino ---------- */
+
+.listino { list-style: none; margin: 0; padding: 0; border-top: 3px solid var(--notte); }
+.listino li {
+  display: grid;
+  gap: 0.25rem 2rem;
+  padding: 1.25rem 0;
+  border-bottom: 3px solid var(--notte);
+}
+.listino h3 { font-size: clamp(3rem, 11vw, 6rem); color: var(--blu); }
+.listino p { margin: 0; max-width: 34ch; }
+@media (min-width: 56rem) {
+  .listino li { grid-template-columns: 1fr 1fr; align-items: end; }
+  .listino p { justify-self: end; text-align: right; font-size: 1.25rem; }
+}
+
+/* ---------- Voci dei clienti ---------- */
+
+.voci { display: grid; gap: 2.5rem; }
+.citazione { margin: 0; }
+.citazione p {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 4.6vw, 3rem);
+  line-height: 1.15;
+  color: var(--blu);
+  max-width: 20ch;
+}
+.citazione p::before, .altre p::before { content: "«"; color: var(--rosso); }
+.citazione p::after, .altre p::after { content: "»"; color: var(--rosso); }
+.citazione footer, .altre footer { margin-top: 0.75rem; font-weight: 700; }
+
+.murale { margin: 0; }
+.murale img { border: 3px solid var(--notte); width: 100%; max-width: 24rem; }
+.murale figcaption { font-size: 0.95rem; margin-top: 0.5rem; }
+
+.altre { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 2rem; }
+.altre blockquote { margin: 0; }
+.altre p { margin: 0; font-size: 1.25rem; max-width: 36ch; }
+
+@media (min-width: 56rem) {
+  .voci { grid-template-columns: 1.3fr 1fr; align-items: center; gap: 4rem; }
+  .altre { grid-template-columns: 1fr 1fr; gap: 4rem; }
 }
 
 /* ---------- Orari e indirizzo ---------- */
 
-.info {
-  display: grid;
-  gap: 2.5rem;
-}
-@media (min-width: 52rem) {
-  .info { grid-template-columns: 1fr 1fr; }
-}
+.pratico { display: grid; gap: 3rem; }
+@media (min-width: 56rem) { .pratico { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 
-.orari {
-  background: var(--nuvola);
-  border: var(--tratto);
-  box-shadow: var(--ombra);
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-  max-width: 26rem;
-}
+.orari { width: 100%; max-width: 26rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .orari th, .orari td {
   text-align: left;
-  padding: 0.55rem 1rem;
-  border-bottom: 1px solid #d8d0b8;
+  vertical-align: top;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,.3);
 }
-.orari tr:last-child th, .orari tr:last-child td { border-bottom: 0; }
 .orari th { font-weight: 400; }
-.orari .chiuso { color: #7a6f5f; }
-.orari tr.oggi { background: var(--muro); }
-.orari tr.oggi th, .orari tr.oggi td { font-weight: 700; }
+.orari .riposo { opacity: 0.65; }
+.orari tr.oggi th, .orari tr.oggi td {
+  background: var(--bianco);
+  color: var(--blu);
+  font-weight: 700;
+  border-bottom-color: var(--bianco);
+}
 
-address { font-style: normal; font-size: 1.25rem; margin-bottom: 1.5rem; }
+.indirizzo { font-style: normal; font-size: clamp(2.4rem, 8vw, 4rem); line-height: 0.95; margin-bottom: 1.5rem; }
+.pulsante {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.2rem;
+  background: var(--bianco);
+  color: var(--notte);
+  font-weight: 700;
+  text-decoration: none;
+}
+.pulsante:hover { background: var(--notte); color: var(--bianco); }
+.pulsante svg { width: 1.25rem; height: 1.25rem; }
 
 /* ---------- Piede ---------- */
 
-.piede {
-  border-top: var(--tratto);
-  background: var(--inchiostro);
-  color: var(--muro);
-  padding: 2rem 0 2.5rem;
-  font-size: 0.95rem;
-}
+.piede { background: var(--notte); color: #c9cef2; padding: 2rem 0 2.5rem; font-size: 0.95rem; }
 .piede p { margin: 0.25rem 0; }
+.piede strong { color: var(--bianco); }
 
 /* ---------- Pagina privacy ---------- */
 
-.testo { max-width: 40rem; padding: 3rem 0; }
-.testo h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); color: var(--nuvola);
-  -webkit-text-stroke: 2px var(--inchiostro); paint-order: stroke fill;
-  text-shadow: 4px 4px 0 var(--inchiostro); margin-bottom: 1.5rem; }
-.testo h2 { font-size: 1.6rem; margin: 2rem 0 0.75rem; }
-
-@media (prefers-reduced-motion: reduce) {
-  .bottone:hover, .bottone:active { transform: none; }
-}
-
-/* =====================================================================
-   VERSIONE STRAVAGANTE — sopra lo stile base: retino da fumetto,
-   scoppio per il voto, fasce in diagonale, vignette colorate.
-   ===================================================================== */
-
-/* retino a puntini (Ben-Day) sul muro giallo */
-body {
-  background-color: var(--muro);
-  background-image: radial-gradient(rgba(201, 48, 42, 0.18) 1.6px, transparent 1.8px);
-  background-size: 14px 14px;
-}
-
-/* il nome: ogni parola storta per conto suo */
-.nome span { width: max-content; }
-.nome span:nth-child(1) { transform: rotate(-4deg); }
-.nome span:nth-child(2) { transform: rotate(1.5deg) translateX(0.4rem); color: var(--muro); }
-.nome .uomo {
-  transform: rotate(-2deg);
-  background: var(--mantella);
-  color: var(--nuvola);
-  padding: 0.1em 0.25em 0;
-  margin-top: 0.15em;
-  border: 4px solid var(--inchiostro);
-  box-shadow: 7px 7px 0 var(--forbici);
-  text-shadow: 4px 4px 0 var(--inchiostro);
-}
-
-.dove {
-  display: inline-block;
-  background: var(--nuvola);
-  border: var(--tratto);
-  padding: 0.3rem 0.7rem;
-  transform: rotate(1deg);
-  font-weight: 700;
-  max-width: none;
-}
-
-/* lo scoppio del voto */
-.scoppio {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 12.5rem;
-  height: 12.5rem;
-  margin: 0.5rem 0 -1rem -0.75rem;
-  text-decoration: none;
-  text-align: center;
-  transform: rotate(-8deg);
-}
-.scoppio svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  fill: var(--forbici);
-  stroke: var(--inchiostro);
-  stroke-width: 5;
-  stroke-linejoin: round;
-  filter: drop-shadow(5px 5px 0 var(--inchiostro));
-}
-.scoppio .voto, .scoppio .quante { position: relative; }
-.scoppio .voto {
-  font-family: "Luckiest Guy", sans-serif;
-  font-size: 3.4rem;
-  line-height: 0.9;
-  color: var(--nuvola);
-  -webkit-text-stroke: 2px var(--inchiostro);
-  paint-order: stroke fill;
-  text-shadow: 3px 3px 0 var(--inchiostro);
-  margin-top: 1.4rem;
-}
-.scoppio .voto small {
-  display: block;
-  font-size: 1rem;
-  letter-spacing: 0.08em;
-  color: var(--muro);
-  -webkit-text-stroke: 1px var(--inchiostro);
-}
-.scoppio .quante {
-  color: var(--nuvola);
-  font-weight: 700;
-  font-size: 0.75rem;
-  line-height: 1.15;
-  margin-top: -2.8rem;
-}
-.scoppio:hover svg { fill: var(--mantella); }
-
-/* bottoni più rumorosi */
-.bottone {
-  border-width: 4px;
-  box-shadow: 6px 6px 0 var(--inchiostro);
-  font-size: 1.2rem;
-}
-.azioni .bottone:nth-child(1) { transform: rotate(-2deg); }
-.azioni .bottone:nth-child(2) { transform: rotate(1.5deg); }
-.azioni .bottone:nth-child(3) { transform: rotate(-1deg); }
-.azioni .bottone:hover { transform: rotate(0) scale(1.05); }
-
-/* polaroid + adesivo "Zac! Zac!" */
-.tavolo { position: relative; }
-.zac {
-  position: absolute;
-  z-index: 5;
-  top: -1.2rem;
-  right: 0.5rem;
-  font-family: "Luckiest Guy", sans-serif;
-  font-size: clamp(1.6rem, 6vw, 2.6rem);
-  color: var(--muro);
-  -webkit-text-stroke: 2px var(--inchiostro);
-  paint-order: stroke fill;
-  text-shadow: 3px 3px 0 var(--forbici), 6px 6px 0 var(--inchiostro);
-  transform: rotate(12deg);
-  pointer-events: none;
-}
-.polaroid li:nth-child(2) { background: var(--muro); }
-
-/* fasce tagliate in diagonale invece che dritte */
-.fascia {
-  border-top: 0;
-  position: relative;
-  clip-path: polygon(0 2.5rem, 100% 0, 100% 100%, 0 100%);
-  margin-top: -1.5rem;
-  padding-top: 5rem;
-  padding-bottom: 4rem;
-}
-.fascia.nuvola { background: var(--mantella); color: var(--nuvola); }
-.fascia:not(.nuvola) { background: transparent; }
-
-/* titoli di sezione su un nastro */
-h2 {
-  display: inline-block;
-  background: var(--forbici);
-  color: var(--nuvola);
-  padding: 0.25em 0.5em 0.1em;
-  border: 4px solid var(--inchiostro);
-  box-shadow: 6px 6px 0 var(--inchiostro);
-  transform: rotate(-2deg);
-  margin-bottom: 2rem;
-}
-.fascia.nuvola h2 { background: var(--muro); color: var(--mantella); }
-
-/* servizi come vignette colorate */
-.servizi li {
-  background: var(--nuvola);
-  color: var(--inchiostro);
-  border: var(--tratto);
-  box-shadow: 6px 6px 0 var(--inchiostro);
-  padding: 1.1rem;
-}
-.servizi li:nth-child(1) { transform: rotate(-1.5deg); }
-.servizi li:nth-child(2) { transform: rotate(1deg); background: var(--muro); }
-.servizi li:nth-child(3) { transform: rotate(-0.5deg); }
-
-/* nuvolette più storte */
-.recensioni li:nth-child(1) blockquote { transform: rotate(-1.5deg); }
-.recensioni li:nth-child(2) blockquote { transform: rotate(1.2deg); background: #fff3c2; }
-.recensioni li:nth-child(3) blockquote { transform: rotate(-0.8deg); }
-.recensioni li:nth-child(2) blockquote::after { background: #fff3c2; }
-.fonte {
-  display: inline-block;
-  background: var(--nuvola);
-  border: 2px solid var(--inchiostro);
-  padding: 0.2rem 0.6rem;
-}
-
-/* orari: cartellone appeso */
-.orari {
-  color: var(--inchiostro);
-  transform: rotate(-1deg);
-  border-width: 4px;
-  box-shadow: 8px 8px 0 var(--forbici), 8px 8px 0 4px var(--inchiostro);
-}
-.orari tr.oggi { background: var(--muro); }
-.orari tr.oggi th::after { content: " · oggi"; color: var(--forbici); }
-address { color: var(--nuvola); font-weight: 700; }
-
-/* piede a zig-zag */
-.piede {
-  border-top: 0;
-  position: relative;
-  margin-top: 1rem;
-}
-.piede::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -18px;
-  height: 18px;
-  background:
-    linear-gradient(135deg, transparent 50%, var(--inchiostro) 50%) 0 0 / 24px 18px repeat-x,
-    linear-gradient(-135deg, transparent 50%, var(--inchiostro) 50%) 0 0 / 24px 18px repeat-x;
-}
-.piede a { color: var(--muro); }
-
-/* l'unico momento animato: lo scoppio "esplode" all'apertura */
-@media (prefers-reduced-motion: no-preference) {
-  .scoppio { animation: botto 0.6s cubic-bezier(.2, 1.6, .4, 1) 0.2s both; }
-  @keyframes botto {
-    from { transform: rotate(-30deg) scale(0); }
-    to { transform: rotate(-8deg) scale(1); }
-  }
-}
-
-@media (min-width: 52rem) {
-  .scoppio { position: absolute; margin: 0; right: -1rem; bottom: -2.5rem; }
-  .apertura > div:first-child { position: relative; }
-  .zac { top: -2rem; right: 0; }
-}
+.testo { max-width: 40rem; padding-top: 3rem; padding-bottom: 3rem; }
+.testo h1 { font-size: clamp(3rem, 12vw, 5rem); color: var(--blu); margin-bottom: 1.5rem; }
+.testo h2 { font-size: 1.3rem; margin: 2rem 0 0.5rem; }
+.testo p { margin: 0 0 1rem; }
