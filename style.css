@@ -100,7 +100,8 @@ a { color: inherit; }
 }
 .vita-media .vita-piena { background: #f0b400; }
 .vita-bassa .vita-piena { background: var(--forbici); }
-.vita-off .vita-piena { height: 0; }
+/* giorno di chiusura: la barra si ricarica, dal basso verso l'alto, a ripetizione */
+.vita-off .vita-piena { height: 55%; background: #58a6ff; transition: none; }
 /* tacche ogni 10% e riflesso, sopra sia al pieno sia al vuoto */
 .vita::after {
   content: "";
@@ -113,6 +114,11 @@ a { color: inherit; }
 @media (prefers-reduced-motion: no-preference) {
   .aperto .vita-piena { animation: battito 1.6s ease-in-out infinite; }
   @keyframes battito { 50% { filter: brightness(1.25); } }
+  .vita-off .vita-piena { animation: ricarica 3.2s ease-in-out infinite; }
+  @keyframes ricarica {
+    0% { height: 5%; }
+    85%, 100% { height: 100%; }
+  }
 }
 
 /* ---------- Testa ---------- */

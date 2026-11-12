@@ -54,7 +54,7 @@
 
     <div>
       <p class="sotto">Parrucchiere da uomo a Torino, in <span class="nowrap">Via Livorno 9/c</span>.</p>
-      <p class="nota" id="nota">La barra qui a sinistra è la vita di Luca: si scarica durante la giornata di lavoro.</p>
+      <p class="nota" id="nota">La barra a sinistra è l'energia di Luca: si scarica durante la giornata di lavoro.</p>
 
       <p class="recensioni-link"><a href="https://www.google.com/maps/search/?api=1&amp;query=Luca+Immagine+Uomo+Via+Livorno+9c+Torino" rel="noopener">4,8 su 5 con 175 recensioni su Google</a></p>
 
@@ -223,16 +223,16 @@
       titolo = "Aperto adesso, fino alle " + bello(fascia[1]);
       poi = prossima(minuti(fascia[1]) - 1);
       if (poi) {
-        frase = (poi.oggi ? "Poi Luca va a mangiare: respawn " : "Poi le forbici riposano: respawn ") + poi.testo + ".";
+        frase = (poi.oggi ? "Poi Luca va a mangiare: si riapre " : "Poi le forbici riposano: si riapre ") + poi.testo + ".";
       }
     } else {
       titolo = "Chiuso adesso";
       poi = prossima(adesso);
       if (poi) {
-        if (!fasce.length) frase = "Server offline: respawn ";
-        else if (!poi.oggi) frase = "Le forbici riposano: respawn ";
-        else if (adesso < minuti(fasce[0][0])) frase = "Luca sta caricando la partita: si apre ";
-        else frase = "Luca è a pranzo: respawn ";
+        if (!fasce.length) frase = "Anche i barbieri riposano: si riapre ";
+        else if (!poi.oggi) frase = "Le forbici riposano: si riapre ";
+        else if (adesso < minuti(fasce[0][0])) frase = "Luca sta scaldando le forbici: si apre ";
+        else frase = "Luca è a pranzo: si riapre ";
         frase += poi.testo + ".";
       }
     }
@@ -250,19 +250,19 @@
     var hp = totale ? Math.round(resta / totale * 100) : 0;
     var ore = Math.floor(resta / 60), min = resta % 60;
     var durata = (ore ? ore + " h" : "") + (ore && min ? " " : "") + (min || !ore ? min + " min" : "");
-    var nota;
-    if (!totale) nota = "Vita di Luca: in ricarica. Oggi niente forbici.";
-    else if (resta === 0) nota = "Vita di Luca: 0%. Per oggi ha finito, stanotte si ricarica.";
-    else if (resta === totale) nota = "Vita di Luca: 100%. Oggi ha davanti " + durata + " di forbici.";
-    else if (aperto) nota = "Vita di Luca: " + hp + "%. Per oggi gli restano " + durata + " di forbici.";
-    else nota = "Vita di Luca: " + hp + "%, in pausa. Per oggi gli restano " + durata + " di forbici.";
+    var nota = "La barra a sinistra è l'energia di Luca per oggi: ";
+    if (!totale) nota = "La barra a sinistra è l'energia di Luca: oggi il negozio è chiuso e lui si ricarica.";
+    else if (resta === 0) nota += "0%. Per oggi ha finito di lavorare.";
+    else if (resta === totale) nota += "100%. Oggi lavora " + durata + ".";
+    else if (aperto) nota += hp + "%. Gli restano " + durata + " di lavoro.";
+    else nota += hp + "%. Adesso è in pausa, poi gli restano " + durata + " di lavoro.";
 
     var radice = document.documentElement;
     radice.style.setProperty("--hp", hp + "%");
     document.body.classList.toggle("vita-off", !totale);
     document.body.classList.toggle("vita-media", hp <= 50 && hp > 20);
     document.body.classList.toggle("vita-bassa", hp <= 20);
-    document.getElementById("nota").textContent = "La barra qui a sinistra: " + nota;
+    document.getElementById("nota").textContent = nota;
 
     var stato = document.getElementById("stato");
     var dentro = document.createElement("span");
