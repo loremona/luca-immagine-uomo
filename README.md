@@ -6,15 +6,15 @@ esterno, niente cookie, niente moduli: non c'è nulla da aggiornare.
 ## Struttura
 - `index.html` — pagina principale
 - `privacy.html` — informativa (il sito non raccoglie dati)
-- `style.css` — stile fumetto (muro giallo, adesivi) + palo da barbiere che gira a negozio aperto
+- `style.css` — stile fumetto (muro giallo, adesivi) + barra della vita di Luca che si scarica durante la giornata
 - `assets/` — foto, caratteri ospitati in locale, favicon
 
 La versione precedente a fumetto è salvata in git: `git checkout fumetto`.
 
 ## Orari
 Gli orari stanno in **due punti** di `index.html`: la tabella "Quando" e
-l'elenco `ORARI` nello script in fondo (decide "Aperto adesso" e fa girare
-il palo). Se cambiano, vanno aggiornati entrambi.
+l'elenco `ORARI` nello script in fondo (decide "Aperto adesso" e regola la
+barra della vita). Se cambiano, vanno aggiornati entrambi.
 
 ## Prima di consegnarlo al cliente
 - [ ] Inserire la **partita IVA** nel piè di pagina (`index.html`, cerca `DA INSERIRE`)

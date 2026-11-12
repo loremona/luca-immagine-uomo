@@ -1,7 +1,7 @@
 /* Luca Immagine Uomo
    Fumetto: muro giallo a puntini, contorni neri, adesivi storti.
-   Il palo da barbiere sul bordo sinistro gira solo quando il negozio
-   è aperto (lo decide lo script in fondo a index.html). */
+   Sul bordo sinistro c'è la barra della vita di Luca: si scarica
+   durante la giornata di lavoro (la regola lo script in fondo a index.html). */
 
 @font-face {
   font-family: "Big Shoulders";
@@ -75,28 +75,44 @@ a { color: inherit; }
   margin: 0;
 }
 
-/* ---------- Il palo ---------- */
+/* ---------- La barra della vita di Luca ----------
+   Altezza del pieno = --hp, impostata dallo script: 100% all'apertura,
+   0% alla chiusura. Verde, poi gialla sotto il 50%, rossa sotto il 20%. */
 
-.palo {
+.vita {
   position: fixed;
   z-index: 20;
   top: 0;
   bottom: 0;
   left: 0;
   width: var(--palo);
+  background: var(--inchiostro);
   border-right: var(--tratto);
-  background-image:
-    linear-gradient(90deg, rgba(31,26,23,.4), rgba(255,255,255,.35) 32%, rgba(255,255,255,0) 55%, rgba(31,26,23,.45)),
-    repeating-linear-gradient(135deg,
-      #fff 0 14.142px,
-      var(--forbici) 14.142px 28.284px,
-      #fff 28.284px 42.426px,
-      var(--mantella) 42.426px 56.569px);
-  background-size: 100% 100%, 100% 80px;
+}
+.vita-piena {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--hp, 100%);
+  background: #3fcf5f;
+  transition: height 1s ease-out, background-color 0.4s;
+}
+.vita-media .vita-piena { background: #f0b400; }
+.vita-bassa .vita-piena { background: var(--forbici); }
+.vita-off .vita-piena { height: 0; }
+/* tacche ogni 10% e riflesso, sopra sia al pieno sia al vuoto */
+.vita::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 calc(10% - 3px), var(--inchiostro) calc(10% - 3px) 10%),
+    linear-gradient(90deg, rgba(0,0,0,.25), rgba(255,255,255,.4) 32%, rgba(255,255,255,0) 55%, rgba(0,0,0,.3));
 }
 @media (prefers-reduced-motion: no-preference) {
-  .aperto .palo { animation: gira 2.6s linear infinite; }
-  @keyframes gira { to { background-position: 0 0, 0 80px; } }
+  .aperto .vita-piena { animation: battito 1.6s ease-in-out infinite; }
+  @keyframes battito { 50% { filter: brightness(1.25); } }
 }
 
 /* ---------- Testa ---------- */
@@ -211,7 +227,6 @@ a { color: inherit; }
 }
 .nowrap { white-space: nowrap; }
 .nota { font-size: 0.95rem; margin: 1rem 0 0; max-width: 34ch; }
-@media (prefers-reduced-motion: reduce) { .nota { display: none; } }
 .recensioni-link { margin: 0.5rem 0 0; font-weight: 700; }
 
 /* ---------- Polaroid a colori + adesivo "Zac! Zac!" ---------- */
