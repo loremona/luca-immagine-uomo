@@ -1,5 +1,5 @@
 /* Luca Immagine Uomo
-   Idea: i tre colori del palo da barbiere e nient'altro.
+   Idea: rosso da insegna, bianco e blu notte.
    Un palo vero corre lungo il bordo sinistro e gira solo quando
    il negozio è aperto (lo decide lo script in fondo a index.html). */
 
@@ -25,9 +25,9 @@
 :root {
   --blu: #1c2a9e;
   --notte: #0d1340;
-  --rosso: #e2322c;
+  --rosso: #d32b26;
   --bianco: #ffffff;
-  --ghiaccio: #eceffb;
+  --ghiaccio: #fdeeec;
   --palo: clamp(16px, 3.6vw, 40px);
   --barra: 4.25rem;
 }
@@ -49,7 +49,7 @@ body {
 
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--rosso); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--notte); outline-offset: 3px; box-shadow: 0 0 0 3px #fff; }
 
 .dentro {
   max-width: 70rem;
@@ -94,7 +94,7 @@ a { color: inherit; }
 /* ---------- Testa ---------- */
 
 .testa {
-  background: var(--blu);
+  background: var(--rosso);
   color: var(--bianco);
   padding-top: clamp(1.5rem, 4vw, 3rem);
   padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
@@ -144,11 +144,11 @@ a { color: inherit; }
 .voto .grande { font-size: 4.5rem; }
 .voto span:last-child { text-decoration: underline; text-underline-offset: 3px; }
 
-/* le due foto piccole, virate in blu perché sembrino una cosa sola con la pagina */
+/* le due foto piccole, virate in rosso perché sembrino una cosa sola con la pagina */
 .scatti { display: flex; align-items: flex-start; gap: 0.75rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
 .scatti li {
   width: 8.5rem;
-  background: var(--blu);
+  background: var(--rosso);
   border: 3px solid var(--bianco);
 }
 .scatti li:nth-child(2) { margin-top: 1.5rem; }
@@ -212,6 +212,7 @@ a { color: inherit; }
     font-size: 1.05rem;
   }
   .azioni a + a { border-left: 0; }
+  .azioni .prenota { background: var(--notte); }
   .azioni a:hover { background: var(--notte); color: var(--bianco); }
   .azioni .prenota:hover { background: var(--bianco); color: var(--rosso); }
   .azioni svg { width: 1.25rem; height: 1.25rem; }
@@ -221,7 +222,7 @@ a { color: inherit; }
 
 .sezione { padding-top: clamp(3rem, 8vw, 6rem); padding-bottom: clamp(3rem, 8vw, 6rem); }
 .sezione.ghiaccio { background: var(--ghiaccio); }
-.sezione.blu { background: var(--blu); color: var(--bianco); }
+.sezione.rossa { background: var(--rosso); color: var(--bianco); }
 
 .titolo { font-size: clamp(2.6rem, 9vw, 5rem); margin-bottom: 2rem; }
 
@@ -234,7 +235,7 @@ a { color: inherit; }
   padding: 1.25rem 0;
   border-bottom: 3px solid var(--notte);
 }
-.listino h3 { font-size: clamp(3rem, 11vw, 6rem); color: var(--blu); }
+.listino h3 { font-size: clamp(2.6rem, 10vw, 6rem); color: var(--rosso); }
 .listino p { margin: 0; max-width: 34ch; }
 @media (min-width: 56rem) {
   .listino li { grid-template-columns: 1fr 1fr; align-items: end; }
@@ -248,25 +249,20 @@ a { color: inherit; }
 .citazione p {
   margin: 0;
   font-weight: 700;
-  font-size: clamp(1.7rem, 4.6vw, 3rem);
-  line-height: 1.15;
-  color: var(--blu);
-  max-width: 20ch;
+  font-size: clamp(1.9rem, 5.6vw, 4rem);
+  line-height: 1.1;
+  color: var(--notte);
+  max-width: 22ch;
 }
 .citazione p::before, .altre p::before { content: "«"; color: var(--rosso); }
 .citazione p::after, .altre p::after { content: "»"; color: var(--rosso); }
 .citazione footer, .altre footer { margin-top: 0.75rem; font-weight: 700; }
-
-.murale { margin: 0; }
-.murale img { border: 3px solid var(--notte); width: 100%; max-width: 24rem; }
-.murale figcaption { font-size: 0.95rem; margin-top: 0.5rem; }
 
 .altre { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 2rem; }
 .altre blockquote { margin: 0; }
 .altre p { margin: 0; font-size: 1.25rem; max-width: 36ch; }
 
 @media (min-width: 56rem) {
-  .voci { grid-template-columns: 1.3fr 1fr; align-items: center; gap: 4rem; }
   .altre { grid-template-columns: 1fr 1fr; gap: 4rem; }
 }
 
@@ -286,7 +282,7 @@ a { color: inherit; }
 .orari .riposo { opacity: 0.65; }
 .orari tr.oggi th, .orari tr.oggi td {
   background: var(--bianco);
-  color: var(--blu);
+  color: var(--rosso);
   font-weight: 700;
   border-bottom-color: var(--bianco);
 }
@@ -314,6 +310,6 @@ a { color: inherit; }
 /* ---------- Pagina privacy ---------- */
 
 .testo { max-width: 40rem; padding-top: 3rem; padding-bottom: 3rem; }
-.testo h1 { font-size: clamp(3rem, 12vw, 5rem); color: var(--blu); margin-bottom: 1.5rem; }
+.testo h1 { font-size: clamp(3rem, 12vw, 5rem); color: var(--rosso); margin-bottom: 1.5rem; }
 .testo h2 { font-size: 1.3rem; margin: 2rem 0 0.5rem; }
 .testo p { margin: 0 0 1rem; }
