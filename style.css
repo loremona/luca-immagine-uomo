@@ -232,7 +232,32 @@ a { color: inherit; }
   transform: rotate(0.8deg);
 }
 .nowrap { white-space: nowrap; }
-.nota { font-size: 0.95rem; margin: 1rem 0 0; max-width: 34ch; }
+/* nuvoletta attaccata alla barra della vita, con la codina che la indica */
+.nota {
+  position: relative;
+  width: fit-content;
+  max-width: min(34rem, calc(100% - 28px));
+  margin: 0 0 1.5rem 16px;
+  padding: 0.45rem 0.8rem;
+  background: var(--nuvola);
+  border: var(--tratto);
+  border-radius: 0.9rem;
+  box-shadow: 4px 4px 0 var(--inchiostro);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.nota::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 0.75rem;
+  width: 14px;
+  height: 14px;
+  background: var(--nuvola);
+  border-left: var(--tratto);
+  border-bottom: var(--tratto);
+  transform: rotate(45deg);
+}
 .recensioni-link { margin: 0.5rem 0 0; font-weight: 700; }
 
 /* ---------- Polaroid a colori + adesivo "Zac! Zac!" ---------- */
