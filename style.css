@@ -1,0 +1,298 @@
+/* Luca Immagine Uomo — stile preso dal murale del negozio:
+   muro giallo, mantella blu, pettine verde, forbici rosse, contorni neri. */
+
+@font-face {
+  font-family: "Luckiest Guy";
+  src: url("assets/luckiest-guy-latin-400-normal.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Atkinson";
+  src: url("assets/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Atkinson";
+  src: url("assets/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --muro: #efd987;
+  --muro-scuro: #e2c766;
+  --mantella: #2b3590;
+  --pettine: #3f8f33;
+  --forbici: #c9302a;
+  --inchiostro: #1f1a17;
+  --nuvola: #fffdf6;
+  --tratto: 3px solid var(--inchiostro);
+  --ombra: 5px 5px 0 var(--inchiostro);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+
+body {
+  margin: 0;
+  background: var(--muro);
+  color: var(--inchiostro);
+  font-family: "Atkinson", system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--mantella);
+  outline-offset: 3px;
+}
+
+.pagina {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+h1, h2 {
+  font-family: "Luckiest Guy", "Arial Black", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+h2 {
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  color: var(--mantella);
+  -webkit-text-stroke: 1.5px var(--inchiostro);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--inchiostro);
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Apertura ---------- */
+
+.apertura {
+  display: grid;
+  gap: 2rem;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
+  align-items: center;
+}
+
+.nome {
+  font-size: clamp(3.2rem, 13vw, 6.5rem);
+  color: var(--nuvola);
+  -webkit-text-stroke: 3px var(--inchiostro);
+  paint-order: stroke fill;
+  text-shadow: 6px 6px 0 var(--inchiostro);
+}
+.nome span { display: block; }
+.nome .uomo { color: var(--forbici); }
+
+.dove {
+  font-size: 1.25rem;
+  margin: 1.25rem 0 1.5rem;
+  max-width: 30ch;
+}
+
+/* il cartello bianco del murale ("Il mio miglior cliente") */
+.cartello {
+  display: inline-block;
+  background: var(--nuvola);
+  border: var(--tratto);
+  box-shadow: var(--ombra);
+  padding: 0.6rem 1rem;
+  transform: rotate(-1.5deg);
+  text-decoration: none;
+}
+.cartello strong { font-size: 1.5rem; }
+.stelle { color: #d99a00; letter-spacing: 0.1em; }
+
+.azioni {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 2rem;
+}
+
+.bottone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.25rem;
+  border: var(--tratto);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--inchiostro);
+  color: var(--nuvola);
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-decoration: none;
+}
+.bottone:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--inchiostro); }
+.bottone:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--inchiostro); }
+.bottone svg { width: 1.3em; height: 1.3em; flex: none; }
+.chiama { background: var(--mantella); }
+.whatsapp { background: var(--pettine); }
+.prenota { background: var(--forbici); }
+
+.murale {
+  margin: 0;
+  justify-self: center;
+  width: min(100%, 20rem);
+  transform: rotate(1.5deg);
+}
+.murale img {
+  border: 4px solid var(--inchiostro);
+  box-shadow: 8px 8px 0 var(--inchiostro);
+  background: var(--muro-scuro);
+}
+.murale figcaption {
+  font-size: 0.95rem;
+  margin-top: 0.9rem;
+  text-align: center;
+}
+
+@media (min-width: 52rem) {
+  .murale { width: min(100%, 26rem); }
+  .apertura {
+    grid-template-columns: 1.15fr 1fr;
+    padding-top: 4rem;
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* ---------- Fasce ---------- */
+
+.fascia {
+  border-top: var(--tratto);
+  padding: 3rem 0;
+}
+.fascia.nuvola { background: var(--nuvola); }
+
+/* ---------- Servizi ---------- */
+
+.servizi {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+.servizi li {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.servizi svg { width: 3.25rem; height: 3.25rem; }
+.servizi h3 { margin: 0 0 0.2rem; font-size: 1.3rem; }
+.servizi p { margin: 0; max-width: 40ch; }
+
+@media (min-width: 52rem) {
+  .servizi { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+}
+
+/* ---------- Recensioni (nuvolette come la schiuma del murale) ---------- */
+
+.recensioni {
+  display: grid;
+  gap: 2.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.recensioni blockquote {
+  margin: 0;
+  background: var(--nuvola);
+  border: var(--tratto);
+  border-radius: 1.5rem;
+  padding: 1.1rem 1.25rem;
+  position: relative;
+  box-shadow: var(--ombra);
+}
+.recensioni blockquote::after {
+  content: "";
+  position: absolute;
+  left: 2rem;
+  bottom: -16px;
+  width: 26px;
+  height: 26px;
+  background: var(--nuvola);
+  border-right: var(--tratto);
+  border-bottom: var(--tratto);
+  transform: rotate(45deg) skew(10deg, 10deg);
+}
+.recensioni p { margin: 0; }
+.recensioni cite {
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+  margin: 1.1rem 0 0 1rem;
+}
+.fonte { margin-top: 2rem; }
+
+@media (min-width: 52rem) {
+  .recensioni { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- Orari e indirizzo ---------- */
+
+.info {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 52rem) {
+  .info { grid-template-columns: 1fr 1fr; }
+}
+
+.orari {
+  background: var(--nuvola);
+  border: var(--tratto);
+  box-shadow: var(--ombra);
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  max-width: 26rem;
+}
+.orari th, .orari td {
+  text-align: left;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid #d8d0b8;
+}
+.orari tr:last-child th, .orari tr:last-child td { border-bottom: 0; }
+.orari th { font-weight: 400; }
+.orari .chiuso { color: #7a6f5f; }
+.orari tr.oggi { background: var(--muro); }
+.orari tr.oggi th, .orari tr.oggi td { font-weight: 700; }
+
+address { font-style: normal; font-size: 1.25rem; margin-bottom: 1.5rem; }
+
+/* ---------- Piede ---------- */
+
+.piede {
+  border-top: var(--tratto);
+  background: var(--inchiostro);
+  color: var(--muro);
+  padding: 2rem 0 2.5rem;
+  font-size: 0.95rem;
+}
+.piede p { margin: 0.25rem 0; }
+
+/* ---------- Pagina privacy ---------- */
+
+.testo { max-width: 40rem; padding: 3rem 0; }
+.testo h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); color: var(--nuvola);
+  -webkit-text-stroke: 2px var(--inchiostro); paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--inchiostro); margin-bottom: 1.5rem; }
+.testo h2 { font-size: 1.6rem; margin: 2rem 0 0.75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bottone:hover, .bottone:active { transform: none; }
+}
