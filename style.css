@@ -311,6 +311,7 @@ a { color: inherit; }
   .azioni a:nth-child(3) { transform: rotate(-1deg); }
   .azioni a:hover { transform: rotate(0) scale(1.06); }
   .azioni svg { width: 1.25rem; height: 1.25rem; }
+  .azioni a { transition: translate 0.18s ease-out; }
 }
 
 /* ---------- Sezioni ---------- */
