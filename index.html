@@ -262,51 +262,73 @@
 </script>
 <script>
 /* Gioco di pochi secondi, solo col mouse su schermo grande:
-   dal primo movimento del mouse "Prenota" resta attaccato al puntatore,
-   ovunque vada; "Chiama" scappa quando ci si avvicina.
-   Dopo DURATA millisecondi tutto torna fermo e normale.
+   dal primo movimento del mouse "Prenota" insegue il puntatore ovunque
+   vada; "Chiama" scappa quando ci si avvicina.
+   Dopo DURATA millisecondi i bottoni tornano a posto e restano fermi.
    Non parte su telefono, da tastiera o con le animazioni ridotte. */
 (function () {
-  if (!window.matchMedia) return;
+  if (!window.matchMedia || !window.requestAnimationFrame) return;
   if (!matchMedia("(hover: hover) and (pointer: fine) and (min-width: 56rem)").matches) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   var DURATA = 6000;
+  var MORBIDEZZA = 0.2; // 1 = attaccato al mouse, più basso = più "elastico"
   var pezzi = [
     { el: document.querySelector(".azioni .prenota"), segue: true, x: 0, y: 0 },
     { el: document.querySelector(".azioni .chiama"), segue: false, raggio: 130, max: 110, x: 0, y: 0 }
   ];
   if (!pezzi[0].el || !pezzi[1].el) return;
-  var partito = false;
 
-  function muovi(e) {
-    if (!partito) {
-      partito = true;
-      pezzi[0].el.style.zIndex = 30; // sopra a tutto mentre insegue
-      setTimeout(fine, DURATA);
-    }
+  var mouse = null, partito = false, finito = false;
+
+  function alMouse(e) {
+    mouse = { x: e.clientX, y: e.clientY };
+    if (partito) return;
+    partito = true;
+    // posizione "di casa" di ogni bottone, misurata una volta sola da fermo
     pezzi.forEach(function (p) {
       var r = p.el.getBoundingClientRect();
-      // centro "di casa" del bottone, cioè senza lo spostamento del gioco
-      var cx = r.left + r.width / 2 - p.x, cy = r.top + r.height / 2 - p.y;
-      var dx = e.clientX - cx, dy = e.clientY - cy;
-      var d = Math.sqrt(dx * dx + dy * dy) || 1;
-      if (p.segue) {
-        p.x = dx; p.y = dy;
-      } else if (d < p.raggio) {
-        var spinta = (1 - d / p.raggio) * p.max;
-        p.x = -dx / d * spinta; p.y = -dy / d * spinta;
-      } else { p.x = 0; p.y = 0; }
-      p.el.style.translate = p.x + "px " + p.y + "px";
+      p.casaX = r.left + r.width / 2 + window.scrollX;
+      p.casaY = r.top + r.height / 2 + window.scrollY;
     });
+    pezzi[0].el.style.zIndex = 30; // sopra a tutto mentre insegue
+    setTimeout(function () { finito = true; }, DURATA);
+    requestAnimationFrame(passo);
   }
 
-  function fine() {
-    document.removeEventListener("mousemove", muovi);
-    pezzi.forEach(function (p) { p.el.style.translate = ""; p.el.style.zIndex = ""; });
+  function passo() {
+    var fermi = true;
+    pezzi.forEach(function (p) {
+      var vaX = 0, vaY = 0;
+      if (!finito) {
+        var dx = mouse.x - (p.casaX - window.scrollX);
+        var dy = mouse.y - (p.casaY - window.scrollY);
+        if (p.segue) {
+          vaX = dx; vaY = dy;
+        } else {
+          var d = Math.sqrt(dx * dx + dy * dy) || 1;
+          if (d < p.raggio) {
+            var spinta = (1 - d / p.raggio) * p.max;
+            vaX = -dx / d * spinta; vaY = -dy / d * spinta;
+          }
+        }
+      }
+      p.x += (vaX - p.x) * MORBIDEZZA;
+      p.y += (vaY - p.y) * MORBIDEZZA;
+      if (Math.abs(p.x) > 0.5 || Math.abs(p.y) > 0.5) fermi = false;
+      p.el.style.translate = p.x.toFixed(1) + "px " + p.y.toFixed(1) + "px";
+    });
+
+    if (finito && fermi) {
+      document.removeEventListener("mousemove", alMouse);
+      pezzi.forEach(function (p) { p.el.style.translate = ""; p.el.style.zIndex = ""; });
+      return;
+    }
+    requestAnimationFrame(passo);
   }
 
-  document.addEventListener("mousemove", muovi, { passive: true });
+  document.addEventListener("mousemove", alMouse, { passive: true });
+  window.addEventListener("resize", function () { finito = true; });
 })();
 </script>
 </body>
