@@ -289,7 +289,7 @@
   if (!matchMedia("(hover: hover) and (pointer: fine) and (min-width: 56rem)").matches) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var FASE1 = 6000, FASE2 = 6000;
+  var FASE1 = 6000, FASE2 = 3000;
   var MORBIDEZZA = 0.2; // 1 = attaccato al mouse, più basso = più "elastico"
   var prenota = { el: document.querySelector(".azioni .prenota"), x: 0, y: 0 };
   var chiama = { el: document.querySelector(".azioni .chiama"), raggio: 170, max: 140, x: 0, y: 0 };
