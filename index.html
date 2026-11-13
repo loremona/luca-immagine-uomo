@@ -278,65 +278,72 @@
 })();
 </script>
 <script>
-/* Gioco di pochi secondi, solo col mouse su schermo grande:
-   dal primo movimento del mouse "Prenota" insegue il puntatore ovunque
-   vada; "Chiama" scappa quando ci si avvicina.
-   Dopo DURATA millisecondi i bottoni tornano a posto e restano fermi.
+/* Gioco di pochi secondi, solo col mouse su schermo grande, in due tempi:
+   1) dal primo movimento del mouse "Prenota" insegue il puntatore ovunque
+      vada, per FASE1 millisecondi; poi torna al suo posto;
+   2) per FASE2 millisecondi "Chiama" scappa quando il mouse si avvicina.
+   Poi tutto torna fermo e normale.
    Non parte su telefono, da tastiera o con le animazioni ridotte. */
 (function () {
   if (!window.matchMedia || !window.requestAnimationFrame) return;
   if (!matchMedia("(hover: hover) and (pointer: fine) and (min-width: 56rem)").matches) return;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var DURATA = 6000;
+  var FASE1 = 6000, FASE2 = 6000;
   var MORBIDEZZA = 0.2; // 1 = attaccato al mouse, più basso = più "elastico"
-  var pezzi = [
-    { el: document.querySelector(".azioni .prenota"), segue: true, x: 0, y: 0 },
-    { el: document.querySelector(".azioni .chiama"), segue: false, raggio: 130, max: 110, x: 0, y: 0 }
-  ];
-  if (!pezzi[0].el || !pezzi[1].el) return;
+  var prenota = { el: document.querySelector(".azioni .prenota"), x: 0, y: 0 };
+  var chiama = { el: document.querySelector(".azioni .chiama"), raggio: 170, max: 140, x: 0, y: 0 };
+  if (!prenota.el || !chiama.el) return;
+  var pezzi = [prenota, chiama];
 
-  var mouse = null, partito = false, finito = false;
+  var mouse = null, fase = 0; // 0 = non partito, 1 = Prenota segue, 2 = Chiama scappa, 3 = fine
 
   function alMouse(e) {
     mouse = { x: e.clientX, y: e.clientY };
-    if (partito) return;
-    partito = true;
+    if (fase) return;
+    fase = 1;
     // posizione "di casa" di ogni bottone, misurata una volta sola da fermo
     pezzi.forEach(function (p) {
       var r = p.el.getBoundingClientRect();
       p.casaX = r.left + r.width / 2 + window.scrollX;
       p.casaY = r.top + r.height / 2 + window.scrollY;
     });
-    pezzi[0].el.style.zIndex = 30; // sopra a tutto mentre insegue
-    setTimeout(function () { finito = true; }, DURATA);
+    prenota.el.style.zIndex = 30; // sopra a tutto mentre insegue
+    setTimeout(function () { if (fase === 1) fase = 2; }, FASE1);
+    setTimeout(function () { fase = 3; }, FASE1 + FASE2);
     requestAnimationFrame(passo);
   }
 
+  function distanza(p) {
+    return { dx: mouse.x - (p.casaX - window.scrollX), dy: mouse.y - (p.casaY - window.scrollY) };
+  }
+
   function passo() {
-    var fermi = true;
-    pezzi.forEach(function (p) {
-      var vaX = 0, vaY = 0;
-      if (!finito) {
-        var dx = mouse.x - (p.casaX - window.scrollX);
-        var dy = mouse.y - (p.casaY - window.scrollY);
-        if (p.segue) {
-          vaX = dx; vaY = dy;
-        } else {
-          var d = Math.sqrt(dx * dx + dy * dy) || 1;
-          if (d < p.raggio) {
-            var spinta = (1 - d / p.raggio) * p.max;
-            vaX = -dx / d * spinta; vaY = -dy / d * spinta;
-          }
-        }
+    // dove vorrebbe andare ogni bottone in questo istante
+    var vaP = { x: 0, y: 0 }, vaC = { x: 0, y: 0 };
+    if (fase === 1) {
+      var dp = distanza(prenota);
+      vaP = { x: dp.dx, y: dp.dy };
+    } else if (fase === 2) {
+      var dc = distanza(chiama);
+      var d = Math.sqrt(dc.dx * dc.dx + dc.dy * dc.dy) || 1;
+      if (d < chiama.raggio) {
+        var spinta = (1 - d / chiama.raggio) * chiama.max;
+        vaC = { x: -dc.dx / d * spinta, y: -dc.dy / d * spinta };
       }
-      p.x += (vaX - p.x) * MORBIDEZZA;
-      p.y += (vaY - p.y) * MORBIDEZZA;
+    }
+
+    var fermi = true;
+    [[prenota, vaP], [chiama, vaC]].forEach(function (coppia) {
+      var p = coppia[0], va = coppia[1];
+      p.x += (va.x - p.x) * MORBIDEZZA;
+      p.y += (va.y - p.y) * MORBIDEZZA;
       if (Math.abs(p.x) > 0.5 || Math.abs(p.y) > 0.5) fermi = false;
       p.el.style.translate = p.x.toFixed(1) + "px " + p.y.toFixed(1) + "px";
     });
+    if (fase === 2 && fermi) prenota.el.style.zIndex = "";
 
-    if (finito && fermi) {
+    if (fase === 3 && fermi) {
       document.removeEventListener("mousemove", alMouse);
       pezzi.forEach(function (p) { p.el.style.translate = ""; p.el.style.zIndex = ""; });
       return;
@@ -345,7 +352,7 @@
   }
 
   document.addEventListener("mousemove", alMouse, { passive: true });
-  window.addEventListener("resize", function () { finito = true; });
+  window.addEventListener("resize", function () { fase = 3; });
 })();
 </script>
 </body>
